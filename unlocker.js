@@ -6,7 +6,7 @@ const patchBySignature = require("./memoryScanner");
 
 
 const regex = /getUserAccount\(\)\{.*?return\s+this\.#\w+\.fetch\(\{.*?\}\).*?\}/g;
-const asarPatch = "getUserAccount(){return this.#v.fetch({endpoint:\"/v3/account\",method:\"GET\",name:\"/v3/account\",collectMetrics:0}).then(response=>{response.subscription={period:\"yearly\",state:\"active\"};response.flags=78;return response;})}"
+const asarPatch = "getUserAccount(){return this.#<fetch_field_name>.fetch({endpoint:\"/v3/account\",method:\"GET\",name:\"/v3/account\",collectMetrics:0}).then(response=>{response.subscription={period:\"yearly\",state:\"active\"};response.flags=78;return response;})}"
 const signature = "E8 ?? ?? ?? ?? 85 C0 75 ?? F6 C3 01 74 ?? 48 89 F9 E8 ?? ?? ?? ??"
 const patchBytes = [0x31]
 const patchOffset = 0x5
@@ -40,6 +40,11 @@ const checkWeModPaths = (dir) => {
     return fs.existsSync(dir) && fs.existsSync(path.join(dir, 'WeMod.exe')) && fs.existsSync(path.join(dir, 'resources'))
 }
 
+function getFetchFieldName(code) {
+    const match = code.match(/this\.#([a-zA-Z_$][0-9a-zA-Z_$]*)\.fetch/);
+    return match ? match[1] : null;
+}
+
 const patchAsar = unpackedPath => {
     let items = fs.readdirSync(unpackedPath,{ withFileTypes: true })
     items = items.filter(item => !item.isDirectory() && /^app-\w+/.test(item.name));
@@ -60,9 +65,18 @@ const patchAsar = unpackedPath => {
             console.error("   - Multiple target functions found. Looks like the version is not supported")
             throw new Error("Multiple target functions found");
         }
+
+        const fetchFieldName = getFetchFieldName(matches[0]);
+        if(!fetchFieldName) {
+            console.error("   - Fetch field name not found")
+            throw new Error("Fetch field name not found");
+        }
+
+        const patch = asarPatch.replace(/<fetch_field_name>/g, fetchFieldName)
+
         console.log("   - Found target function in: ", item.name)
         console.log("   - Patching asar...")
-        fs.writeFileSync(path.join(unpackedPath, item.name), data.replace(regex, asarPatch), {encoding: 'utf8'})
+        fs.writeFileSync(path.join(unpackedPath, item.name), data.replace(regex, patch), {encoding: 'utf8'})
         console.log("   - Patch applied")
         asarPatchApplied = true;
         break;
@@ -152,7 +166,6 @@ if(fs.existsSync(defaultDir)) {
         }
     }
 }
-
 
 (async () => {
     await prepare();

@@ -4,7 +4,7 @@
 
 ---
 
-<h4>WeMod patcher allows you to get some WeMod features absolutely free. This script patches WeMod, thereby removing the daily usage limit (2h), etc.</h4>
+<h4>WeMod patcher allows you to get some WeMod Pro features absolutely free. This script patches WeMod, thereby removing the daily usage limit (2h), etc.</h4>
 
 ## 👾 No malware? Is it safe for me?
 
@@ -40,7 +40,7 @@ With this patch you will be able to use the latest version together with Pro.
 2. **Run the script**
     ``` bash
     bun install/npm install/yarn install/whatever you use
-    npm ./unlocker.js
+    node ./unlocker.js
     ```
 3. **Follow the instructions**
 
