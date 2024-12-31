@@ -38,3 +38,7 @@ With this patch you will be able to use the latest version together with Pro.
 ---
 ## 📜 License
 This project is licensed under the Apache-2.0 - see the [LICENSE](LICENSE.txt) file for details.
+
+---
+## ❤️ Support
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/kitbyte)
