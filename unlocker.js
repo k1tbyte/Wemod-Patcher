@@ -5,7 +5,7 @@ const asar = require('asar');
 const patchBySignature = require("./memoryScanner");
 
 
-const regex = /getUserAccount\(\)\{.*?return\s+this\.#\w+\.fetch\(\{.*?\}\).*?\}/g;
+const regex = /getUserAccount\(\)\{.*?return\s+this\.#\w+\.fetch\(\{.*?}\).*?}/g;
 const asarPatch = "getUserAccount(){return this.#<fetch_field_name>.fetch({endpoint:\"/v3/account\",method:\"GET\",name:\"/v3/account\",collectMetrics:0}).then(response=>{response.subscription={period:\"yearly\",state:\"active\"};response.flags=78;return response;})}"
 const signature = "E8 ?? ?? ?? ?? 85 C0 75 ?? F6 C3 01 74 ?? 48 89 F9 E8 ?? ?? ?? ??"
 const patchBytes = [0x31]
@@ -150,7 +150,7 @@ if(fs.existsSync(defaultDir)) {
         .filter(item => item.isDirectory() && /^app-\w+/.test(item.name))
         .map(item => {
             const folderPath = path.join(defaultDir, item.name);
-            const stats = fs.statSync(folderPath); // Получаем информацию о папке
+            const stats = fs.statSync(folderPath);
             return {
                 name: item.name,
                 path: folderPath,

@@ -3,13 +3,38 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "build": "electron-builder --win portable"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "kitbyte",
+  "license": "Apache-2.0",
   "description": "",
   "dependencies": {
     "asar": "^3.2.0"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "kitbyte.wemod-patcher",
+    "productName": "WeMod Patcher",
+    "directories": {
+      "output": "dist"
+    },
+    "asar": true,
+    "win": {
+      "target": [{
+        "target": "portable",
+        "arch": ["x64"]
+      }],
+      "artifactName": "${productName}.exe"
+    },
+    "compression": "maximum",
+    "removePackageScripts": true,
+    "removePackageKeywords": true,
+    "extraResources": false,
+    "electronLanguages": ["en-US"]
   }
 }
