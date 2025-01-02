@@ -2,9 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>WeMod Patcher</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
- Setup with electron
+<div class="container">
+    <div class="main-section">
+        <div class="header">
+            <h1>WeMod Patcher</h1>
+            <p>Select the folder with the WeMod version like: “app-X.XX.X” and click patch</p>
+        </div>
+
+        <div class="path-section">
+            <label for="file-path">Folder path:</label>
+            <div class="path-input-container">
+                <input type="text" id="file-path" class="path-input" placeholder="Select file..." readonly>
+                <button class="browse-btn" id="browse-btn">Browse</button>
+            </div>
+        </div>
+
+        <button id="patch-btn" class="patch-btn" disabled>
+            Patch
+        </button>
+
+        <div class="log-section">
+            <div class="log-entry info">Waiting for action...</div>
+        </div>
+    </div>
+</div>
+<script src="renderer.js"></script>
 </body>
 </html>
