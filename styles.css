@@ -15,7 +15,7 @@ body {
 
 .container {
     background: #21223d;
-    padding: 24px;
+    padding: 24px 24px 15px;
     border: 1px solid #1e2039;
     height: 100%;
     width: 100%;
@@ -29,7 +29,6 @@ body {
     height: 100%;
     justify-content: center;
     flex-direction: column;
-    gap: 20px;
 }
 
 .header {
@@ -55,6 +54,7 @@ body {
 .path-section {
     background: #26254b;
     padding: 16px;
+    margin-top: 20px;
     border-radius: 6px;
     border: 1px solid #1e2039;
 }
@@ -97,6 +97,7 @@ body {
 }
 
 .patch-btn {
+    margin: 15px 0;
     background: #6d67fd;
     color: #f8f6f6;
     border: none;
@@ -149,4 +150,39 @@ body {
 
 .info {
     color: #6d67fd;
+}
+
+#sourceBtn {
+    cursor: pointer;
+}
+
+.footer {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer span {
+    font-size: 12px;
+}
+
+.hidden {
+    display: none;
+}
+
+#updateBtn {
+    background: springgreen;
+    color: #1e2039;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-left: 10px;
+    padding: 10px 25px;
+    transition: all 0.1s;
+}
+
+#updateBtn:hover {
+    scale: 105%
 }

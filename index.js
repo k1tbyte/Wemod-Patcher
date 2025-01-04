@@ -1,6 +1,13 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require("fs");
+const Unlocker = require("./unlocker");
+const GitHubUpdater = require("./updater");
+
+const packageJsonPath = path.join(__dirname, 'package.json');
+const packageData = require(packageJsonPath)
+const updater = new GitHubUpdater(packageData.author, packageData.name);
+
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -19,6 +26,12 @@ function createWindow() {
 
 const checkWeModPath = (root) => fs.existsSync(path.join(root, 'WeMod.exe')) &&
     fs.existsSync(path.join(root, 'resources/app.asar'))
+
+function log(message, type = 'info') {
+    BrowserWindow.getAllWindows().forEach(win => {
+        win.webContents.send('log', { message, type });
+    });
+}
 
 app.whenReady().then(createWindow);
 
@@ -43,6 +56,11 @@ ipcMain.handle('select-file', async () => {
     }
     return null;
 });
+
+ipcMain.handle('apply-patch', async (event, path) => {
+    const unlocker = new Unlocker(path, (e) => log(e))
+    await unlocker.start()
+})
 
 ipcMain.handle('resolve-default-path', async () => {
     const defaultDir = path.join(process.env.LOCALAPPDATA || path.join(process.env.HOME || process.env.USERPROFILE, 'AppData', 'Local'), 'WeMod');
@@ -90,3 +108,27 @@ ipcMain.handle('start-patch', async (event, filePath) => {
         };
     }
 });
+
+ipcMain.handle("get-current-version", () => {
+    return packageData.version
+})
+
+
+ipcMain.handle("check-updates", async () => {
+    return await updater.checkForUpdates()
+})
+
+ipcMain.on('open-link', () => {
+    require('electron').shell.openExternal("https://github.com/k1tbyte/Wemod-Patcher")
+})
+
+ipcMain.on("apply-update", async (event, source) => {
+    try {
+        log("Downloading update ...")
+        const path = await updater.downloadUpdate(source)
+        log("Preparation")
+        updater.applyUpdate(path)
+    } catch (err) {
+        log(err, "error")
+    }
+})

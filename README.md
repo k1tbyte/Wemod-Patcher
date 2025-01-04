@@ -12,7 +12,7 @@ Yes, this is safe. This script is open-source, and you can check the code yourse
 
 With this patch you will be able to use the latest version together with Pro.
 
-##  👀 What features will be available?
+## 💫  What features will be available?
 
 ✅ Unlimited usage time <br/>
 ✅ No ads <br/>
@@ -21,21 +21,25 @@ With this patch you will be able to use the latest version together with Pro.
 ❌ Connect phone <br/>
 ❌ Hotkeys (hotkey functionality breaks after patch for unknown reason)
 
-## ❓ How to use?
+## 👀 How to use?
 
-1. **Clone the Repository (or just download source code)**
-    ``` bash
-    git clone https://github.com/k1tbyte/Wemod-patcher.git
-    cd Wemod-patcher
-    ```
-2. **Run the script**
-    ``` bash
-    bun install/npm install/yarn install/whatever you use
-    node ./unlocker.js
-    ```
-3. **Follow the instructions**
+1. Go to [Releases](https://github.com/k1tbyte/Wemod-Patcher/releases) page.
+2. Download latest version
+3. Run and click the patch
 
 ---
+
+## ❓ Q&A
+
+- I applied the patch but when I inject I get stuck on 'Loading mods...'.
+  - Just close WeMod and try again
+- During the game, some hacks are enabled without my input
+  - This is a bug after the patch, you have to turn off hotkeys in WeMod settings
+- Why is the patch executable file size so large? It seems to me that you want to harm my system.
+  - The thing is that the application is written in Electron, so it also puts chromium, nodejs and some libraries in the exe. Maybe Electron is a temporary solution and in the future I will consider another option
+
+---
+
 ## 📜 License
 This project is licensed under the Apache-2.0 - see the [LICENSE](LICENSE.txt) file for details.
 

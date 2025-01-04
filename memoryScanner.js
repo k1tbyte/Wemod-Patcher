@@ -55,6 +55,13 @@ async function patchBySignature(filePath, functionSignature, patchBytes, patchOf
             if (matchIndex !== -1) {
                 const functionStartPosition = filePosition + matchIndex;
 
+                const checkBuffer = Buffer.alloc(patchBytes.length);
+                await fileHandle.read(checkBuffer, 0, patchBytes.length, functionStartPosition + patchOffset);
+
+                if (Buffer.compare(checkBuffer, Buffer.from(patchBytes)) === 0) {
+                    return 0; // Memory already patched
+                }
+
                 // Go to patch position
                 await fileHandle.write(Buffer.from(patchBytes), 0, patchBytes.length, functionStartPosition + patchOffset);
 

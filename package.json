@@ -1,13 +1,13 @@
 {
   "name": "wemod-patcher",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --win portable"
   },
   "keywords": [],
-  "author": "kitbyte",
+  "author": "k1tbyte",
   "license": "Apache-2.0",
   "description": "",
   "dependencies": {
@@ -23,13 +23,21 @@
     "directories": {
       "output": "dist"
     },
-    "asar": true,
     "win": {
+      "icon": "./appicon.ico",
       "target": [{
         "target": "portable",
         "arch": ["x64"]
       }],
       "artifactName": "${productName}.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./appicon.ico",
+      "uninstallerIcon": "./appicon.ico",
+      "installerHeaderIcon": "./appicon.ico"
     },
     "compression": "maximum",
     "removePackageScripts": true,
