@@ -75,15 +75,17 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 
-                <TextBox Style="{StaticResource TitledTextBox}"
-                         Uid="Folder path" Margin="10" IsReadOnly="True"
-                         Cursor="Hand"
-                         Text="{Binding WeModPath}"
-                         VerticalAlignment="Center" Tag="Folder not found">
-                    <TextBox.InputBindings>
+                <Grid Margin="10" Cursor="Hand" Background="Transparent">
+                    <Grid.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding SetFolderPathCommand}" />
-                    </TextBox.InputBindings>
-                </TextBox>
+                    </Grid.InputBindings>
+                    <TextBox Style="{StaticResource TitledTextBox}"
+                             Uid="Folder path"  IsReadOnly="True"
+                             Text="{Binding WeModPath}"
+                             VerticalAlignment="Center" Tag="Folder not found">
+                    </TextBox>
+                </Grid>
+
                     
                     <Border Grid.Row="1" BorderBrush="{DynamicResource Border}" BorderThickness="1"
                             Margin="10 0 10 10"
@@ -91,6 +93,7 @@
                         <ListBox ItemsSource="{Binding LogList}" SelectionMode="Single"
                                  BorderBrush="Transparent" BorderThickness="0"
                                  Background="Transparent" 
+                                 x:Name="LogList"
                                  Padding="6"
                                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -159,6 +162,7 @@
                 <DockPanel Grid.Row="2" Margin="10 0 10 10">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" 
                                 Cursor="Hand" 
+                                HorizontalAlignment="Left"
                                 MouseDown="OpenSourceClicked" 
                                 Background="Transparent">
                         <Viewbox VerticalAlignment="Center" Width="32" Height="32">

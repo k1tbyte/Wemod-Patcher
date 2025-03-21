@@ -17,6 +17,7 @@ namespace WeModPatcher.View.MainWindow
 
     public class MainWindowVm : ObservableObject
     {
+        private readonly MainWindow _view;
         public ObservableCollection<LogEntry> LogList { get; } = new ObservableCollection<LogEntry>();
         
         private string _weModPath;
@@ -153,6 +154,7 @@ namespace WeModPatcher.View.MainWindow
             }
             
             File.Copy(backupPath, Path.Combine(WeModPath, "resources", "app.asar"), true);
+            File.Delete(backupPath);
             Log("Backup restored successfully.", ELogType.Success);
             AlreadyPatched = false;
             IsPatchEnabled = true;
@@ -181,16 +183,19 @@ namespace WeModPatcher.View.MainWindow
             {
                 message = $"[{logType.ToString().ToUpper()}] {message}";
 
-                LogList.Add(new LogEntry
+                var entry = new LogEntry
                 {
                     LogType = logType,
                     Message = message
-                });
+                };
+                LogList.Add(entry);
+                _view.LogList.ScrollIntoView(entry);
             });
         }
 
-        public MainWindowVm()
+        public MainWindowVm(MainWindow view)
         {
+            _view = view;
             SetFolderPathCommand = new RelayCommand(OnFolderPathSelection);
             ApplyPatchCommand = new RelayCommand(OnPatching);
             RestoreBackupCommand = new RelayCommand(OnBackupRestoring);

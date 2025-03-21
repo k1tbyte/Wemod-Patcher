@@ -15,7 +15,7 @@ namespace WeModPatcher.View.MainWindow
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowVm();
+            this.DataContext = new MainWindowVm(this);
             Instance = this;
         }
         
