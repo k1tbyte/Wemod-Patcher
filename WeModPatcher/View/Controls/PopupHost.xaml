@@ -1,0 +1,49 @@
+﻿<Grid x:Class="WeModPatcher.View.Controls.PopupHost"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WeModPatcher.View.Controls"
+             mc:Ignorable="d"
+             Visibility="Collapsed">
+    <Border x:Name="Splash" Background="Black" CornerRadius="7"
+            Opacity="0.45"
+            MouseLeftButtonDown="HidePopup"/>
+    
+    <Border Background="{DynamicResource Background}" d:Margin="0"
+            Margin="0 40 0 40" x:Name="PopupPresenter" Width="Auto" Height="Auto"
+            BorderBrush="{DynamicResource Border}" BorderThickness="1" MinWidth="300"
+            VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="4" Padding="15 10 10 15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button BorderThickness="0" BorderBrush="Transparent"
+                Tag="{StaticResource CloseIcon}"
+                Width="25" Height="25" Padding="8" Background="Transparent"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Click="HidePopup"
+                x:Name="cancel">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource IconButton}" TargetType="Button">
+                        <Setter Property="Foreground" Value="{DynamicResource MutedForeground}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
+            <TextBlock x:Name="Title" Text="This is title" Foreground="{DynamicResource Foreground}"
+                       HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" 
+                       VerticalAlignment="Bottom"/>
+            
+            <ContentPresenter x:Name="Presenter" Margin="0 20 0 0"
+                              Content="{Binding PopupContent}" Grid.Row="2"/>
+
+        </Grid>
+    </Border>
+</Grid>

@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        <Brush x:Key="Background">#09090b</Brush>
+    <Brush x:Key="Foreground">#FAFAFA</Brush>
+    <Brush x:Key="Card">#27272A</Brush>
+    <Brush x:Key="CardForeground">#FAFAFA</Brush>
+    <Brush x:Key="Popover">#09090b</Brush>
+    <Brush x:Key="PopoverForeground">#FAFAFA</Brush>
+    <Brush x:Key="Primary">#FAFAFA</Brush>
+    <Brush x:Key="PrimaryForeground">#18181B</Brush>
+    <Brush x:Key="Secondary">#27272A</Brush>
+    <Brush x:Key="SecondaryForeground">#FAFAFA</Brush>
+    <Brush x:Key="Muted">#18181a</Brush>
+    <Brush x:Key="MutedForeground">#A1A1AA</Brush>
+    <Brush x:Key="Accent">#27272A</Brush>
+    <Brush x:Key="AccentForeground">#FAFAFA</Brush>
+    <Brush x:Key="Destructive">Red</Brush>
+    <Brush x:Key="DestructiveForeground">#FAFAFA</Brush>
+    <Brush x:Key="Border">#27272A</Brush>
+    <Brush x:Key="Input">#27272A</Brush>
+    <Brush x:Key="Ring">#D4D4D8</Brush>
+</ResourceDictionary>

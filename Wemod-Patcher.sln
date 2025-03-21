@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeModPatcher", "WeModPatcher\WeModPatcher.csproj", "{106D3E44-ECBB-4EF3-84B2-5FC6BCF77727}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsarSharp", "AsarSharp\AsarSharp.csproj", "{BEAA604A-402A-4387-8903-A53FC913A26E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{106D3E44-ECBB-4EF3-84B2-5FC6BCF77727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{106D3E44-ECBB-4EF3-84B2-5FC6BCF77727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{106D3E44-ECBB-4EF3-84B2-5FC6BCF77727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{106D3E44-ECBB-4EF3-84B2-5FC6BCF77727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEAA604A-402A-4387-8903-A53FC913A26E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEAA604A-402A-4387-8903-A53FC913A26E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEAA604A-402A-4387-8903-A53FC913A26E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEAA604A-402A-4387-8903-A53FC913A26E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
