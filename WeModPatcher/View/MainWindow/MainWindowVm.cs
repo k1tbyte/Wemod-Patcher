@@ -19,6 +19,7 @@ namespace WeModPatcher.View.MainWindow
     {
         private readonly MainWindow _view;
         public ObservableCollection<LogEntry> LogList { get; } = new ObservableCollection<LogEntry>();
+        private static Updater _updater = new Updater();
         
         private string _weModPath;
         
@@ -43,7 +44,7 @@ namespace WeModPatcher.View.MainWindow
             }
         }
 
-        private bool _isPatchEnabled = false;
+        private bool _isPatchEnabled;
 
         public bool IsPatchEnabled
         {
@@ -51,18 +52,26 @@ namespace WeModPatcher.View.MainWindow
             set => SetProperty(ref _isPatchEnabled, value);
         }
         
-        private bool _alreadyPatched = false;
+        private bool _alreadyPatched;
         public bool AlreadyPatched
         {
             get => _alreadyPatched;
             set => SetProperty(ref _alreadyPatched, value);
         }
         
+        private bool _isUpdateAvailable;
+        public bool IsUpdateAvailable
+        {
+            get => _isUpdateAvailable;
+            set => SetProperty(ref _isUpdateAvailable, value);
+        }
+        
         public RelayCommand SetFolderPathCommand { get; }
         public RelayCommand ApplyPatchCommand { get; }
         public RelayCommand RestoreBackupCommand { get; }
+        public AsyncRelayCommand UpdateCommand { get; }
         
-        private bool CheckWeModPath(string root)
+        private static bool CheckWeModPath(string root)
         {
             try
             {
@@ -79,7 +88,7 @@ namespace WeModPatcher.View.MainWindow
         {
             string localAppDataPath = Environment.GetEnvironmentVariable("LOCALAPPDATA");
 
-            string defaultDir = Path.Combine(localAppDataPath, "WeMod");
+            string defaultDir = Path.Combine(localAppDataPath ?? "", "WeMod");
             
             if (!Directory.Exists(defaultDir))
             {
@@ -193,18 +202,37 @@ namespace WeModPatcher.View.MainWindow
             });
         }
 
+        private async Task OnUpdate(object param)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    await _updater.Update();
+                }
+                catch (Exception e)
+                {
+                    Log($"Failed to update: {e.Message}", ELogType.Error);
+                    return;
+                }
+                
+                Log("WeModPatcher updated successfully. Restarting...", ELogType.Success);
+            });
+        }
+        
         public MainWindowVm(MainWindow view)
         {
+            Task.Run(async () => IsUpdateAvailable = await _updater.CheckForUpdates());
             _view = view;
             SetFolderPathCommand = new RelayCommand(OnFolderPathSelection);
             ApplyPatchCommand = new RelayCommand(OnPatching);
             RestoreBackupCommand = new RelayCommand(OnBackupRestoring);
+            UpdateCommand = new AsyncRelayCommand(OnUpdate);
             
             WeModPath = FindWeModDirectory();
             if (WeModPath == null)
             {
                 Log("WeMod directory not found.", ELogType.Error);
-                return;
             }
         }
     }

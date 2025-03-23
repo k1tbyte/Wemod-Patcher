@@ -39,6 +39,18 @@
                             WeMod Patcher 
                         </Bold>
                     </TextBlock>
+                    <TextBlock x:Name="VersionLabel" VerticalAlignment="Bottom"
+                               Opacity="0.7" FontSize="10" Margin="5 0 0 5"
+                               Foreground="{DynamicResource Foreground}">
+                        v 1.0.0
+                    </TextBlock>
+                    
+                    <Button Background="SpringGreen" Foreground="{DynamicResource Muted}"
+                            FontWeight="Medium" Padding="20 0" Margin="10 5 20 5"
+                            ToolTip="Click to update"
+                            Command="{Binding UpdateCommand}"
+                            Visibility="{Binding IsUpdateAvailable, Converter={StaticResource ToVisibilityConverter}}"
+                            Content="A new version is available"/>
                 </StackPanel>
                                 
                 <StackPanel  HorizontalAlignment="Right" Orientation="Horizontal">
@@ -136,28 +148,33 @@
                     </Border>
                 
 
-                <Grid Grid.Row="2" HorizontalAlignment="Right" Margin="10 0 10 10">
-                    <Grid.Style>
-                        <Style TargetType="{x:Type Grid}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsPatchEnabled}" Value="False">
-                                    <Setter Property="Cursor" Value="No"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                    <Button Style="{StaticResource ColoredButton}"
-                            IsEnabled="{Binding IsPatchEnabled}"
-                            FontWeight="Bold" FontSize="16" Width="200" 
-                            Command="{Binding ApplyPatchCommand}">Patch</Button>
-                </Grid>
-                <Button Grid.Row="2" 
-                        Margin="10 0 10 10" HorizontalAlignment="Right"
-                        Command="{Binding RestoreBackupCommand }"
-                        FontWeight="Bold" FontSize="16" Width="200" 
-                        Style="{StaticResource ColoredButton}"
-                        Visibility="{Binding AlreadyPatched, Converter={StaticResource ToVisibilityConverter}}"
-                        Content="Restore"/>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="2" Margin="10 0 10 10">
+                    <Grid>
+                        <Grid HorizontalAlignment="Right" >
+                            <Grid.Style>
+                                <Style TargetType="{x:Type Grid}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPatchEnabled}" Value="False">
+                                            <Setter Property="Cursor" Value="No"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                            <Button Style="{StaticResource ColoredButton}"
+                                    IsEnabled="{Binding IsPatchEnabled}"
+                                    FontWeight="Bold" FontSize="16" Width="200" 
+                                    Command="{Binding ApplyPatchCommand}">Patch</Button>
+                        </Grid>
+                        <Button HorizontalAlignment="Right"
+                                Command="{Binding RestoreBackupCommand }"
+                                FontWeight="Bold" FontSize="16" Width="200" 
+                                Style="{StaticResource ColoredButton}"
+                                Visibility="{Binding AlreadyPatched, Converter={StaticResource ToVisibilityConverter}}"
+                                Content="Restore"/>
+                    </Grid>
+                </StackPanel>
+
+
                 
                 <DockPanel Grid.Row="2" Margin="10 0 10 10">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" 

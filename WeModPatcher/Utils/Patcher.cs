@@ -200,7 +200,7 @@ namespace WeModPatcher.Utils
                 return;
             }
             
-            await PatchPE();
+          //  await PatchPE();
             
             _logger("[PATCHER] Done!", ELogType.Success);
         }

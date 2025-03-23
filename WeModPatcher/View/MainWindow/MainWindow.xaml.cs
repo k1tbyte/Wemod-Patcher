@@ -16,6 +16,7 @@ namespace WeModPatcher.View.MainWindow
         {
             InitializeComponent();
             this.DataContext = new MainWindowVm(this);
+            VersionLabel.Text = Constants.Version.ToString();
             Instance = this;
         }
         

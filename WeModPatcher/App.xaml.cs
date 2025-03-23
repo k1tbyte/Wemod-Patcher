@@ -28,5 +28,10 @@ namespace WeModPatcher
             MessageBox.Show(e.ToString());
             Shutdown();
         }
+
+        public new static void Shutdown()
+        {
+            Current.Dispatcher.Invoke(() => Current.Shutdown());
+        }
     }
 }
