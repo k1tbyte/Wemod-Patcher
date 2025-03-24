@@ -1,4 +1,8 @@
 <div align="center">
+
+![logo](./assets/icon.svg)
+
+---
   <h1>WeMod Patcher</h1>
 </div>
 
@@ -47,9 +51,18 @@ With this patch you will be able to use the latest version together with Pro.
 
 ---
 
+## 🖼️ Screenshots
+![1](./assets/screenshots/app1.png)
+![2](./assets/screenshots/app2.png)
+---
+
 ## 📜 License
 This project is licensed under the Apache-2.0 - see the [LICENSE](LICENSE.md) file for details.
 
 ---
 ## ❤️ Support
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/kitbyte)
+
+---
+
+[![Star History Chart](https://api.star-history.com/svg?repos=k1tbyte/Wemod-Patcher&type=Date)](https://www.star-history.com/#k1tbyte/Wemod-Patcher&Date)
