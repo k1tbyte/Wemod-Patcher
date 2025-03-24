@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WeModPatcher.ReactiveCore
+namespace WeModPatcher.ReactiveUICore
 {
     public class ObservableObject : INotifyPropertyChanged
     {

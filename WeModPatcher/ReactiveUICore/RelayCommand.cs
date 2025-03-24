@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WeModPatcher.ReactiveCore
+namespace WeModPatcher.ReactiveUICore
 {
     public sealed class RelayCommand : ICommand
     {

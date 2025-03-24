@@ -88,14 +88,14 @@
                 </Grid.RowDefinitions>
                 
                 <Grid Margin="10" Cursor="Hand" Background="Transparent">
-                    <Grid.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding SetFolderPathCommand}" />
-                    </Grid.InputBindings>
                     <TextBox Style="{StaticResource TitledTextBox}"
                              Uid="Folder path"  IsReadOnly="True"
                              Text="{Binding WeModPath}"
                              VerticalAlignment="Center" Tag="Folder not found">
                     </TextBox>
+                    <Grid.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding SetFolderPathCommand}" />
+                    </Grid.InputBindings>
                 </Grid>
 
                     

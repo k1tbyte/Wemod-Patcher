@@ -11,16 +11,19 @@ namespace WeModPatcher.View.MainWindow
     public partial class MainWindow
     {
         public static MainWindow Instance;
+        public readonly MainWindowVm ViewModel;
         
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowVm(this);
+            this.ViewModel = new MainWindowVm(this);
+            this.DataContext = ViewModel;
             VersionLabel.Text = Constants.Version.ToString();
             Instance = this;
+
         }
         
-        public void OpenPopup(object content, string title = null)
+        public void OpenPopup(FrameworkElement content, string title = null)
         {
             this.PopupHost.PopupContent = content;
             PopupHost.Title.Text = title;

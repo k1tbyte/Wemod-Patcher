@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using AsarSharp;
+using Newtonsoft.Json;
 using WeModPatcher.Models;
+using WeModPatcher.Utils;
 using WeModPatcher.View.MainWindow;
+using Application = System.Windows.Application;
 
-namespace WeModPatcher.Utils
+namespace WeModPatcher.Core
 {
-    public class Patcher
+    public class StaticPatcher
     {
         private class PatchEntry
         {
@@ -42,24 +46,16 @@ namespace WeModPatcher.Utils
             }
         };
         
-        // ...
-        // test eax, eax (0x85 for	r/m16/32/64)
-        // jnz      short loc_1403A4DD2 (Integrity check failed)
-        // call    near ptr funk_1445527E0
-        // ...
-        private const string PatchSignature = "E8 ?? ?? ?? ?? ?? C0 75 ?? F6 C3 01 74 ?? 48 89 F9 E8 ?? ?? ?? ??";
-        private static readonly byte[] PatchBytes = { 0x31 };
-        private const int PatchOffset = 0x5;
-        
         private readonly string _weModRootFolder;
         private readonly Action<string, ELogType> _logger;
-        private readonly HashSet<EPatchType> _config;
+        private readonly PatchConfig _config;
         private readonly string _asarPath;
         private readonly string _backupPath;
         private readonly string _unpackedPath;
         private int _sumOfPatches = 0;
+        private readonly string _exePath;
 
-        public Patcher(string weModRootFolder, Action<string, ELogType> logger, HashSet<EPatchType> config)
+        public StaticPatcher(string weModRootFolder, Action<string, ELogType> logger, PatchConfig config)
         {
             _weModRootFolder = weModRootFolder;
             _logger = logger;
@@ -68,6 +64,7 @@ namespace WeModPatcher.Utils
             _asarPath = Path.Combine(weModRootFolder, "resources", "app.asar");
             _unpackedPath = Path.Combine(weModRootFolder, "resources", "app.asar.unpacked");
             _backupPath = Path.Combine(weModRootFolder, "resources", "app.asar.backup");
+            _exePath = Path.Combine(_weModRootFolder, "WeMod.exe");
         }
         
         private static string GetFetchFieldName(string targetFunction)
@@ -126,7 +123,7 @@ namespace WeModPatcher.Utils
                 throw new Exception("[PATCHER] No app bundle found");
             }
             
-            var requestedPatches = _config.ToList();
+            var requestedPatches = _config.PatchTypes.ToList();
             requestedPatches.ForEach(patch => _sumOfPatches += (int)patch);
             foreach (var item in items)
             {
@@ -143,11 +140,10 @@ namespace WeModPatcher.Utils
             }
         }
 
-        private async Task PatchPE()
+        private void PatchPe()
         {
             _logger("[PATCHER] Patching PE...", ELogType.Info);
-            var pePath = Path.Combine(_weModRootFolder, "WeMod.exe");
-            var patchResult = await PatternScanner.PatchBySignature(pePath, PatchSignature, PatchBytes, PatchOffset);
+            var patchResult = MemoryUtils.PatchFile(_exePath,Constants.ExePatchSignature, Constants.ExePatchSignature.PatchBytes);
             if(patchResult == -1)
             {
                 _logger("[PATCHER] Failed to patch PE", ELogType.Error);
@@ -156,8 +152,41 @@ namespace WeModPatcher.Utils
             _logger(patchResult == 0 ? "[PATCHER] PE already patched!" : "[PATCHER] PE patched successfully!", ELogType.Success);
         }
         
-        public async Task Patch()
+        private void CreateShortcut()
         {
+            // invoke file dialog save file
+
+            var fileDialog = new SaveFileDialog()
+            {
+                CheckPathExists = true,
+                AddExtension = true,
+                SupportMultiDottedExtensions = false,
+                FileName = "WeMod",
+            };
+            
+            if(fileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            _config.Path = _weModRootFolder;
+
+            var json = JsonConvert.SerializeObject(_config, Formatting.None);
+            Utils.Win32.Shortcut.CreateShortcut(
+                fileName: fileDialog.FileName + ".lnk",
+                targetPath: Assembly.GetExecutingAssembly().Location,
+                arguments: Extensions.Base64Encode(json),
+                workingDirectory:  Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                description: null,
+                iconPath: _exePath
+            );
+            
+            _logger("[PATCHER] The shortcut has been created, now you should only run WeMod through this shortcut", ELogType.Success);
+        }
+        
+        public void Patch()
+        {
+            RuntimePatcher.KillWeMod();
             if (!File.Exists(_backupPath))
             {
                 _logger("[PATCHER] Creating backup...", ELogType.Info);
@@ -170,8 +199,7 @@ namespace WeModPatcher.Utils
 
             if(!File.Exists(_asarPath))
             {
-                _logger("[PATCHER] app.asar not found!", ELogType.Error);
-                return;
+                throw new Exception("app.asar not found");
             }
 
             try
@@ -181,8 +209,7 @@ namespace WeModPatcher.Utils
             }
             catch (Exception e)
             {
-                _logger($"[PATCHER] Failed to unpack app.asar: {e.Message}", ELogType.Error);
-                return;
+                throw new Exception($"[PATCHER] Failed to unpack app.asar: {e.Message}");
             }
             
             PatchAsar();
@@ -196,11 +223,17 @@ namespace WeModPatcher.Utils
             }
             catch (Exception e)
             {
-                _logger($"[PATCHER] Failed to pack app.asar: {e.Message}", ELogType.Error);
-                return;
+                throw new Exception($"[PATCHER] Failed to pack app.asar: {e.Message}");
             }
-            
-          //  await PatchPE();
+
+            if (_config.PatchMethod == EPatchProcessMethod.Static)
+            {
+                PatchPe();
+            }
+            else if(_config.PatchMethod == EPatchProcessMethod.Runtime)
+            {
+                Application.Current.Dispatcher.Invoke(CreateShortcut);
+            }
             
             _logger("[PATCHER] Done!", ELogType.Success);
         }

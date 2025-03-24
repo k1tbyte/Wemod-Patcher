@@ -210,9 +210,9 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Border BorderBrush="{DynamicResource Border}"
-                                    BorderThickness="0 0 1 0">
+                                    BorderThickness="0 0 1 0" IsHitTestVisible="False">
                                 <TextBlock Text="{TemplateBinding Uid}"
-                                           VerticalAlignment="Center" Cursor="Hand"
+                                           VerticalAlignment="Center"
                                            FontSize="12"
                                            Foreground="{DynamicResource MutedForeground}"
                                            Padding="10 0" />

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WeModPatcher.ReactiveCore
+namespace WeModPatcher.ReactiveUICore
 {
     public sealed class AsyncRelayCommand : ICommand
     {

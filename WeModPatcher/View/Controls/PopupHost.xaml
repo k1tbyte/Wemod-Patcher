@@ -37,9 +37,11 @@
                 </Button.Style>
             </Button>
             
-            <TextBlock x:Name="Title" Text="This is title" Foreground="{DynamicResource Foreground}"
-                       HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" 
-                       VerticalAlignment="Bottom"/>
+            <StackPanel Grid.Row="0" x:Name="TitleContainer" Orientation="Horizontal">
+                <TextBlock x:Name="Title" Text="This is title" Foreground="{DynamicResource Foreground}"
+                           HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" 
+                           VerticalAlignment="Bottom"/>
+            </StackPanel>
             
             <ContentPresenter x:Name="Presenter" Margin="0 20 0 0"
                               Content="{Binding PopupContent}" Grid.Row="2"/>

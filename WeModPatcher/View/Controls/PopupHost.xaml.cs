@@ -65,6 +65,10 @@ namespace WeModPatcher.View.Controls
 
             Visibility   = Visibility.Collapsed;
             Closed?.Invoke();
+            if (PopupContent is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
             PopupContent = null;
             Closed       = null;
             OpenedSemaphore.Release();

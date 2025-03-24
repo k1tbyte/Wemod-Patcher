@@ -4,28 +4,123 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WeModPatcher.View.Popups"
+             xmlns:controls="clr-namespace:WeModPatcher.View.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="Auto" d:DesignWidth="Auto"
+             Background="{DynamicResource Background}"
              Foreground="{DynamicResource MutedForeground}"
              FontWeight="Medium"
              FontSize="13">
-    <Grid Margin="0 0 5 0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="27"/>
-            <RowDefinition Height="27"/>
-            <RowDefinition Height="27"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"  VerticalAlignment="Center" Text="Activate WeMod Pro"/>
-        <CheckBox Grid.Row="0" x:Name="ActivateProBox" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="True"/>
+    <UserControl.Resources>
+        <Button x:Key="BackButton" Click="BackClicked" VerticalAlignment="Bottom" Padding="3"
+                Margin="0 0 15 0"
+                Width="35" Height="23"  Style="{StaticResource IconButton}"
+                Tag="{StaticResource ArrowLeft}"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid x:Name="PatchVectors"  Visibility="Visible" Margin="0 0 5 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="27"/>
+                <RowDefinition Height="27"/>
+                <RowDefinition Height="27"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0"  VerticalAlignment="Center" Text="Activate WeMod Pro"/>
+            <CheckBox Grid.Row="0" x:Name="ActivateProBox" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="True"/>
         
-        <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Disable telemetry"/>
-        <CheckBox Grid.Row="1" x:Name="DisableTelemetryBox" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Disable telemetry"/>
+            <CheckBox Grid.Row="1" x:Name="DisableTelemetryBox" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         
-        <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Disable updates"/>
-        <CheckBox Grid.Row="2" x:Name="DisableUpdateBox" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Disable updates"/>
+            <CheckBox Grid.Row="2" x:Name="DisableUpdateBox" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         
-        <Button Grid.Row="3" Padding="0 5 0 5" Margin="0 15 0 0" Content="Continue"
-                Click="ButtonBase_OnClick"/>
+            <Button Grid.Row="3" Padding="0 5 0 5" Margin="0 15 0 0" Content="Continue"
+                    Click="NextClicked"/>
+        </Grid>
+        
+        <Grid x:Name="PatchMethod" Visibility="Collapsed" Width="650">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Grid>
+                <Border Background="{DynamicResource Muted}" HorizontalAlignment="Right" Width="2"
+                        CornerRadius="10"/>
+                <StackPanel>
+                    <TextBlock FontSize="16" Text="Static" Foreground="{DynamicResource Foreground}" HorizontalAlignment="Center" Margin="0 0 0 10"/>
+                    <controls:InfoItem 
+                        IconColor="SpringGreen" 
+                        IconData="{StaticResource CheckDecagram}" 
+                        Text="Starting WeMod without this program" />
+        
+                    <controls:InfoItem 
+                        Margin="0 15 0 0"
+                        IconColor="PaleVioletRed" 
+                        IconData="{StaticResource AlertDecagram}" 
+                        Text="Violation of WeMod digital signature (possibly marked by antiviruses, anti-cheats)" />
+                    
+                    <controls:InfoItem 
+                        Margin="0 10 0 0"
+                        IconColor="PaleVioletRed" 
+                        IconData="{StaticResource AlertDecagram}" 
+                        Text="Auto-patching after WeMod updates is not available" />
+        
+                    <controls:InfoItem 
+                        Margin="0 10 0 0"
+                        IconColor="PaleVioletRed" 
+                        IconData="{StaticResource AlertDecagram}" 
+                        Text="Hotkeys will be broken" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="0" Grid.Column="1">
+                <StackPanel Margin="10 0 0 0">
+                    <TextBlock FontSize="16" Text="Runtime" Foreground="{DynamicResource Foreground}"
+                               HorizontalAlignment="Center" Margin="-10 0 0 10"/>
+                    
+                    <controls:InfoItem 
+                        IconColor="SpringGreen" 
+                        IconData="{StaticResource CheckDecagram}" 
+                        Text="Hotkeys still work" />
+                    
+                    <controls:InfoItem  Margin="0 10 0 0"
+                                        IconColor="SpringGreen" 
+                                        IconData="{StaticResource CheckDecagram}" 
+                                        Text="Does not break the digital signature (does not make changes to the original .exe)" />
+                    
+                    <controls:InfoItem Margin="0 10 0 0"
+                                       IconColor="SpringGreen" 
+                                       IconData="{StaticResource CheckDecagram}" 
+                                       Text="Automatically applies patches to new versions (referring to your current selection)" />
+                    
+                    <controls:InfoItem 
+                        Margin="0 10 0 0"
+                        IconColor="Yellow" 
+                        IconData="{StaticResource AlertDecagram}" 
+                        Text="The WeMod startup process is controlled by the patcher. (Don't worry, you will no longer see this window. You will run WeMod as usual but using the shortcut that will be created after choosing this method). So you will want to keep this program. Make sure it's in a safe directory (not Temp, Downloads, etc)." />
+                    
+                    <controls:InfoItem Margin="0 10 0 0"
+                                       IconColor="PaleVioletRed" 
+                                       IconData="{StaticResource AlertDecagram}" 
+                                       Text="Running WeMod directly through official WeMod.exe is not possible until you restore patch backup" />
+                </StackPanel>
+            </Grid>
+            
+            <Button Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                    Padding="10 5" Margin="0 15 0 0"
+                    Click="OnStaticSelected"
+                    Content="Use static"/>
+            
+            <Button Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                    Padding="10 5" Margin="0 15 0 0"
+                    Click="OnRuntimeSelected"
+                    Content="Use runtime"/>
+        </Grid>
     </Grid>
+
 </UserControl>

@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="WeModPatcher.View.Controls.InfoItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WeModPatcher.View.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Viewbox Width="20" Height="20" VerticalAlignment="Top">
+            <Path Fill="{Binding IconColor}" Data="{Binding IconData}"/>
+        </Viewbox>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="5 0 5 0" TextWrapping="Wrap" 
+                   FontSize="12" Text="{Binding Text}"/>
+    </Grid>
+</UserControl>
