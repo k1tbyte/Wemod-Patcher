@@ -44,12 +44,21 @@ namespace WeModPatcher.Core
             
             var debugEvent = new Imports.DEBUG_EVENT();
             var processIds = new List<uint>();
-            while (Imports.WaitForDebugEvent(ref debugEvent, 1000))
+            while (Imports.WaitForDebugEvent(ref debugEvent, uint.MaxValue))
             {
                 var code = debugEvent.dwDebugEventCode;
                 if (code == Imports.CREATE_PROCESS_DEBUG_EVENT)
                 {
                     processIds.Add(debugEvent.dwProcessId);
+                }
+                else if (code == Imports.EXIT_PROCESS_DEBUG_EVENT)
+                {
+                    processIds.Remove(debugEvent.dwProcessId);
+                    
+                    if(processIds.Count == 0)
+                    {
+                        break;
+                    }
                 }
                 else if (code == Imports.EXCEPTION_DEBUG_EVENT)
                 {

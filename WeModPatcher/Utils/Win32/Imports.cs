@@ -247,6 +247,7 @@ namespace WeModPatcher.Utils.Win32
         public const uint DEBUG_PROCESS = 0x00000001;
         public const uint DBG_CONTINUE = 0x00010002;
         public const uint CREATE_PROCESS_DEBUG_EVENT = 3;
+        public const uint EXIT_PROCESS_DEBUG_EVENT = 5;
         public const uint EXCEPTION_DEBUG_EVENT = 1;
         public const uint LOAD_DLL_DEBUG_EVENT = 6;
         public const uint OUTPUT_DEBUG_STRING_EVENT = 8;
