@@ -43,13 +43,16 @@ namespace WeModPatcher.Core
             }
             
             var debugEvent = new Imports.DEBUG_EVENT();
-            var processIds = new List<uint>();
+            var processIds = new Dictionary<uint, bool>();
             while (Imports.WaitForDebugEvent(ref debugEvent, uint.MaxValue))
             {
+                uint continueStatus = Imports.DBG_CONTINUE;
                 var code = debugEvent.dwDebugEventCode;
+                //  Console.WriteLine("Debug event code: " + code);
                 if (code == Imports.CREATE_PROCESS_DEBUG_EVENT)
                 {
-                    processIds.Add(debugEvent.dwProcessId);
+                    // Console.WriteLine("Spawning process: " + debugEvent.dwProcessId);
+                    processIds.Add(debugEvent.dwProcessId, false);
                 }
                 else if (code == Imports.EXIT_PROCESS_DEBUG_EVENT)
                 {
@@ -62,11 +65,17 @@ namespace WeModPatcher.Core
                 }
                 else if (code == Imports.EXCEPTION_DEBUG_EVENT)
                 {
-                    var exceptionInfo = Imports.MapUnmanagedStructure<Imports.EXCEPTION_DEBUG_INFO>(debugEvent.Union);
+                    // pass the exception to the process
+                    continueStatus = Imports.DBG_EXCEPTION_NOT_HANDLED;
                     
-                    if (exceptionInfo.ExceptionRecord.ExceptionCode == Imports.EXCEPTION_BREAKPOINT)
+                    var exceptionInfo = Imports.MapUnmanagedStructure<Imports.EXCEPTION_DEBUG_INFO>(debugEvent.Union);
+                    //  Console.WriteLine("Exception code: " + exceptionInfo.ExceptionRecord.ExceptionCode);
+                    
+                    if (exceptionInfo.ExceptionRecord.ExceptionCode == Imports.EXCEPTION_BREAKPOINT && 
+                        processIds.TryGetValue(debugEvent.dwProcessId, out var wasPatched) && !wasPatched)
                     {
                         var process = Process.GetProcessById((int)debugEvent.dwProcessId);
+                        //    Console.WriteLine("Scanning process: " + process.ProcessName + " " + process.Id);
                         var address = MemoryUtils.ScanVirtualMemory(
                             process.Handle,
                             process.Modules[0].BaseAddress, 
@@ -76,7 +85,7 @@ namespace WeModPatcher.Core
                         
                         if (address != IntPtr.Zero)
                         {
-                            MemoryUtils.SafeWriteVirtualMemory(
+                            processIds[debugEvent.dwProcessId] =  MemoryUtils.SafeWriteVirtualMemory(
                                 process.Handle, 
                                 address + Constants.ExePatchSignature.Offset,
                                 Constants.ExePatchSignature.PatchBytes
@@ -96,12 +105,12 @@ namespace WeModPatcher.Core
                     }
                 }
                 
-                Imports.ContinueDebugEvent(debugEvent.dwProcessId, debugEvent.dwThreadId, Imports.DBG_CONTINUE);
+                Imports.ContinueDebugEvent(debugEvent.dwProcessId, debugEvent.dwThreadId, continueStatus);
             }
 
-            foreach (var processId in processIds)
+            foreach (var entry in processIds)
             {
-                Imports.DebugActiveProcessStop(processId);
+                Imports.DebugActiveProcessStop(entry.Key);
             }
             
             Imports.CloseHandle(processInfo.hProcess);

@@ -252,6 +252,7 @@ namespace WeModPatcher.Utils.Win32
         public const uint LOAD_DLL_DEBUG_EVENT = 6;
         public const uint OUTPUT_DEBUG_STRING_EVENT = 8;
         public const uint EXCEPTION_BREAKPOINT = 0x80000003;
+        public const uint DBG_EXCEPTION_NOT_HANDLED = 0x80010001;
 
         // Constants for VirtualProtectex
         public const uint PAGE_EXECUTE_READWRITE = 0x40;
